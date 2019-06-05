@@ -1,0 +1,34 @@
+version: '3'
+volumes:
+  shopping_lists_pg_db: {}
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - shopping_lists_pg_db:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: ./compose/rails/Dockerfile
+    command: sh -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - ./server:/server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      # this is done for consistency across dev envs
+      - RAILS_SHARED_JWT_SECRET_KEY=supersecretkey
+      - RAILS_MASTER_KEY=superfakekey
+
+  client:
+    build:
+      context: .
+      dockerfile: ./compose/reactjs/Dockerfile
+    volumes:
+      - ./client:/client
+    ports:
+      - "3001:3000"
