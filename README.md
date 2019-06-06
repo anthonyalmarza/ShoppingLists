@@ -19,13 +19,23 @@ auth, contacts, etc.
 
 ## Development
 
-Starting up the servers is easy, just run `./bin/init` and you'll notice that the services listed in
-docker-compose.yml file will be built and started, as well as the db created, migrated and seeded.
-
-Navigate to http://localhost:3001 to interact with the client GUI.
-
 NOTE: The scripts listed in the root bin folder of this project are designed to help development on ubuntu,
 which runs each container as root under the hood. So instead of doing `docker-compose run api rails generate resource SomeModel name:string`
 you can can do `./bin/docker/run api rails generate resource SomeModel name:string` - this will `chown` your
 generated files and clean up your containers.
 
+### `./bin/init`
+Starting up the servers is easy, just run `./bin/init` and you'll notice that the services listed in
+docker-compose.yml file will be built and started, as well as the db created, migrated and seeded.
+
+Navigate to http://localhost:3001 to interact with the client GUI.
+
+### Running Tests
+
+For rails:
+
+`./bin/docker/run api bundle exec rspec`
+
+For react:
+
+`./bin/docker/run client yarn test`
